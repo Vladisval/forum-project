@@ -1,16 +1,38 @@
 import React from 'react';
 import './Header.scss'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { AppBar, Box, Tab, Tabs, Typography } from "@mui/material";
 
 const Header : React.FC = () => {
-  return (    <header className="header">
-      <h1 className="header__title">Vladislav's forum</h1>
-      <h2 className="header__subtitle">Your go-to platform for learning and resources</h2>
-      <nav className="header__nav">
-        <Link to="/" className="header__link">Home</Link>
-        <Link to="/tasks" className="header__link">Tasks</Link>
-      </nav>
-    </header>
+
+  const location = useLocation();
+  const currentTab = location.pathname;
+
+  return (
+    <AppBar sx={{display: "flex", flexDirection: "row"}} >
+      <Box display="flex" alignItems="center" >
+        <Typography className="header-title">Vladislav's forum</ Typography>
+      </Box>
+
+      <Box display="flex" justifyContent="center" p={2} gap={2}>
+        <Tabs value={currentTab}>
+          <Tab
+            label="Posts"
+            value="/"
+            component={Link}
+            to="/"
+            sx={{ minWidth: 100, background: "white" }}
+          />
+          <Tab
+            label="Users"
+            value="/users"
+            component={Link}
+            to="/users"
+            sx={{ minWidth: 100,  background: "white" }}
+          />
+        </Tabs>
+      </Box>
+    </AppBar>
   );
 };
 
