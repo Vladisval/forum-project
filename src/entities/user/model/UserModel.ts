@@ -4,7 +4,7 @@ export interface UserModel {
   name: string,
   username?: string,
   email?: string,
-  avatarUrl: string,
+  avatarUrl?: string,
   address?: {
     street: string,
     suite: string,

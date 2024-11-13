@@ -1,8 +1,8 @@
-import { PostModel } from "../model/PostModel.ts";
+import { EnhancedPost } from "../model/PostModel.ts";
 import { Avatar, Card, CardContent, CardHeader, Typography } from "@mui/material";
 
 interface PostCardProps {
-  post: PostModel;
+  post: EnhancedPost;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
@@ -11,7 +11,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <CardHeader
         avatar={<Avatar src={post.author?.avatarUrl} alt={post.author?.name} />}
         title={post.title}
-        subheader={`by ${post.author?.name} - ${post.createdAt?.toLocaleDateString()}`}
+        subheader={`by ${post.author?.name} - ${post.createdAt}`}
       />
       <CardContent>
         <Typography variant="body1" color="text.secondary">

@@ -1,10 +1,13 @@
 import { UserModel } from "../../user/model/UserModel.ts";
 
 export interface PostModel {
-  userId: UserModel["id"],
-  author?: UserModel,
+  authorId: number,
   id: number,
   title: string,
   body: string,
-  createdAt?: Date;
+  createdAt: string;
+}
+
+export interface EnhancedPost extends PostModel {
+  author: UserModel;
 }

@@ -1,40 +1,45 @@
-import { UserModel } from "../../entities/user/model/UserModel.ts";
-import { PostModel } from "../../entities/post/model/PostModel.ts";
-import { Container, Typography } from "@mui/material";
+import { EnhancedPost } from "../../entities/post/model/PostModel.ts";
+import { CircularProgress, Container, Typography } from "@mui/material";
 import PostCard from "../../entities/post/ui/PostCard.tsx";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../app/store/store.ts";
+import { fetchPosts } from "../../entities/post/model/postSlice.ts";
+import { fetchUsers } from "../../entities/user/model/userSlice.ts";
+import { useEffect } from "react";
+import { selectEnhancedPosts } from "../../entities/post/model/postsSelector.ts";
 
 
-const mockUser: UserModel = {
-  id: 1,
-  name: 'John Doe',
-  avatarUrl: 'https://i.pravatar.cc/150?img=1',
-};
-
-const mockPosts: PostModel[] = [
-  {
-    userId: 1,
-    id: 1,
-    author: mockUser,
-    title: 'My First Post',
-    body: 'This is the content of the first post.',
-    createdAt: new Date(),
-  },
-  {
-    userId: 1,
-    id: 2,
-    author: mockUser,
-    title: 'Another Post',
-    body: 'Here is some more content for another post.',
-    createdAt: new Date(),
-  },
-];
 const PostsPage = () => {
+  const dispatch = useDispatch();
+  const enhancedPosts = useSelector(selectEnhancedPosts);
+  const postsStatus = useSelector((state: RootState) => state.posts.status);
+  const usersStatus = useSelector((state: RootState) => state.users.status);
+  console.log(enhancedPosts)
+  useEffect(() => {
+    if (postsStatus === 'idle') {
+      // @ts-ignore
+      dispatch(fetchPosts());
+    }
+    if (usersStatus === 'idle') {
+      // @ts-ignore
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, postsStatus, usersStatus]);
+
+  if (postsStatus === 'loading' || usersStatus === 'loading') {
+    return (
+      <Container maxWidth="md" sx={{ textAlign: 'center', pt: 4 }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md">
       <Typography variant="h4" component="h1" align="center" gutterBottom>
         User Posts
       </Typography>
-      {mockPosts.map((post) => (
+      {enhancedPosts.map((post: EnhancedPost) => (
         <PostCard key={post.id} post={post} />
       ))}
     </Container>
