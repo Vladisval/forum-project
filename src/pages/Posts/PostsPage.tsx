@@ -8,6 +8,7 @@ import { fetchUsers } from "../../entities/user/model/userSlice.ts";
 import { useEffect, useState } from "react";
 import { selectEnhancedPosts } from "../../entities/post/model/postsSelector.ts";
 import PaginationComponent from "../../shared/ui/PaginationComponent/PaginationComponent.tsx";
+import UserFilter from "../../shared/ui/Filters/usersFilter.tsx";
 
 
 const PostsPage = () => {
@@ -15,11 +16,17 @@ const PostsPage = () => {
   const posts = useSelector(selectEnhancedPosts);
   const postsStatus = useSelector((state: RootState) => state.posts.status);
   const usersStatus = useSelector((state: RootState) => state.users.status);
+  const users = useSelector((state: RootState) => state.users.users);
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedUserId, setSelectedUserId] = useState<string | 'all'>('all');
 
-  const pageCount = Math.ceil(posts.length / itemsPerPage);
-  const paginatedPosts = posts.slice(
+
+  const filteredPosts = selectedUserId === 'all'
+    ? posts
+    : posts.filter((post) => post.userId === selectedUserId);
+  const pageCount = Math.ceil(filteredPosts.length / itemsPerPage);
+  const paginatedPosts = filteredPosts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -28,7 +35,16 @@ const PostsPage = () => {
     setCurrentPage(page);
   };
 
+  const handleUserChange = (userId: string) => {
+    setSelectedUserId(userId);
+    setCurrentPage(1);
+  };
 
+  useEffect(() => {
+    if (currentPage > pageCount) {
+      setCurrentPage(1);
+    }
+  }, [pageCount, currentPage]);
 
   useEffect(() => {
     if (postsStatus === 'idle') {
@@ -54,6 +70,11 @@ const PostsPage = () => {
       <Typography variant="h4" component="h1" align="center" gutterBottom>
         User Posts
       </Typography>
+      <UserFilter
+        users={users}
+        selectedUserId={selectedUserId}
+        onUserChange={handleUserChange}
+      />
       {paginatedPosts.map((post: EnhancedPost) => (
         <PostCard key={post.id} post={post} />
       ))}
