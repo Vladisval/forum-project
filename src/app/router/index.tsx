@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Users from "../../pages/Users/ui/Users.tsx";
+import UsersPage from "../../pages/Users/UsersPage.tsx";
 import PostsPage from "../../pages/Posts/PostsPage.tsx";
 import App from "../App/App.tsx";
 
@@ -11,7 +11,7 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [{
       path: 'users',
-      element: <Users />
+      element: <UsersPage />
     },
       {
         path: '',

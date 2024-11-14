@@ -14,7 +14,7 @@ const PostsPage = () => {
   const enhancedPosts = useSelector(selectEnhancedPosts);
   const postsStatus = useSelector((state: RootState) => state.posts.status);
   const usersStatus = useSelector((state: RootState) => state.users.status);
-  console.log(enhancedPosts)
+
   useEffect(() => {
     if (postsStatus === 'idle') {
       // @ts-ignore

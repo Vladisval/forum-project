@@ -5,7 +5,7 @@ interface PostCardProps {
   post: EnhancedPost;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard = ({ post }: PostCardProps) => {
   return (
     <Card variant="outlined" sx={{ mb: 2 }}>
       <CardHeader

@@ -7,6 +7,12 @@ export async function fetchUsersApi(): Promise<UserModel[]> {
   return data.map((user: any) => ({
     id: user.id,
     name: user.name,
-    avatarUrl: `https://i.pravatar.cc/150?u=${user.id}`, // Используем фейковый URL для аватара
+    avatarUrl: `https://i.pravatar.cc/150?u=${user.id}`,
+    email: user.email,
+    phone: user.phone,
+    address: user.address,
+    website: user.website,
+
+
   })) as UserModel[];
 }
