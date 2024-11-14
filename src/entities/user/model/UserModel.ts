@@ -2,9 +2,9 @@
 export interface UserModel {
   id: number,
   name: string,
-  username?: string,
-  email?: string,
-  avatarUrl?: string,
+  username: string,
+  email: string,
+  avatarUrl: string,
   address?: {
     street: string,
     suite: string,
@@ -15,8 +15,8 @@ export interface UserModel {
       lng: string
     }
   },
-  phone?: string,
-  website?: string,
+  phone: string,
+  website: string,
   company?: {
     name: string,
     catchPhrase: string,

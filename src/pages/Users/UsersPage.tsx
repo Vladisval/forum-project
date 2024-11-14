@@ -17,6 +17,7 @@ const UsersPage = () => {
     }
   }, [dispatch, usersStatus]);
 
+
   if (usersStatus === 'loading') {
     return (
       <Container maxWidth="md" sx={{ textAlign: 'center', pt: 4 }}>
@@ -28,7 +29,7 @@ const UsersPage = () => {
   return (
  <Container maxWidth="md">
    <Typography variant="h4" component="h1" align="center" gutterBottom>
-     User Posts
+     Users
    </Typography>
    {users.map((user) => (
      <UserCard key={user.id} user={user} />

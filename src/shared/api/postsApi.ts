@@ -6,10 +6,7 @@ export async function fetchPostsApi(): Promise<EnhancedPost[]> {
   const data = await response.json();
 
   return data.map((post: any) => ({
-    id: post.id,
-    title: post.title,
-    content: post.body,
-    authorId: post.userId,
+    ...post,
     createdAt: new Date().toISOString(),
   })) as EnhancedPost[];
 }
