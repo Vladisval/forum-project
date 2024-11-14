@@ -5,7 +5,6 @@ import Header from "../../widgets/Header/Header.tsx";
 import { CssBaseline } from "@mui/material";
 
 
-
 function App() {
 
   return (
@@ -16,8 +15,7 @@ function App() {
         <Outlet />
       </Layout>
     </>
-
   )
 }
 
-export default App
+export default App;

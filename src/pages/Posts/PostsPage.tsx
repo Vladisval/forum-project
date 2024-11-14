@@ -5,15 +5,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
 import { fetchPosts } from "../../entities/post/model/postSlice.ts";
 import { fetchUsers } from "../../entities/user/model/userSlice.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { selectEnhancedPosts } from "../../entities/post/model/postsSelector.ts";
+import PaginationComponent from "../../shared/ui/PaginationComponent/PaginationComponent.tsx";
 
 
 const PostsPage = () => {
   const dispatch = useDispatch();
-  const enhancedPosts = useSelector(selectEnhancedPosts);
+  const posts = useSelector(selectEnhancedPosts);
   const postsStatus = useSelector((state: RootState) => state.posts.status);
   const usersStatus = useSelector((state: RootState) => state.users.status);
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageCount = Math.ceil(posts.length / itemsPerPage);
+  const paginatedPosts = posts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+
 
   useEffect(() => {
     if (postsStatus === 'idle') {
@@ -39,9 +54,15 @@ const PostsPage = () => {
       <Typography variant="h4" component="h1" align="center" gutterBottom>
         User Posts
       </Typography>
-      {enhancedPosts.map((post: EnhancedPost) => (
+      {paginatedPosts.map((post: EnhancedPost) => (
         <PostCard key={post.id} post={post} />
       ))}
+
+      <PaginationComponent
+        pageCount={pageCount}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </Container>
   );
 };

@@ -7,7 +7,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({children}) => {
     <>
       <Container className='layout' component="main" maxWidth="md">
         {children}
-      </Container>;
+      </Container>
     </>
   )
 };
