@@ -7,10 +7,9 @@ import App from "../App/App.tsx";
 
 export const router = createBrowserRouter([
   { path: '/', element: <App /> , children: [
-      {path: '', element: <PostsPage />, children: [
-          { path: '/posts/:postId', element: <PostDetailPage /> },
-        ]},
+      {path: '', element: <PostsPage />},
       { path: '/users', element: <UsersPage /> },
+      { path: '/posts/:postId', element: <PostDetailPage /> },
     ]},
 
 ]);

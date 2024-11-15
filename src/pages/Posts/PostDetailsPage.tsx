@@ -1,41 +1,97 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, TextField, Divider, Paper, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { selectors } from "../../entities/post/model/postSlice.ts";
-import { formatDate } from "../../utils/formatDate.ts";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { createComment, fetchComments } from "../../entities/comment/model/commentSlice.ts";
 
+
+interface CommentFormInput {
+  body: string;
+}
 
 const PostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
+  const dispatch = useDispatch();
 
   const post = useSelector((state: RootState) => selectors.postById(state, postId!));
+  const comments = useSelector((state: RootState) => state.comments.comments);
+  const loading = useSelector((state: RootState) => state.comments.loading);
 
+  const { register, handleSubmit, reset } = useForm<CommentFormInput>();
+
+  useEffect(() => {
+    if (postId) {
+      // @ts-ignore
+      dispatch(fetchComments(Number(postId)));
+    }
+  }, [postId, dispatch]);
+
+  const onSubmit = (data: CommentFormInput) => {
+    if (postId) {
+      // @ts-ignore
+      dispatch(createComment({ ...data, postId: Number(postId), userId: 1 }));
+      reset();
+    }
+  };
 
   if (!post) {
     return <Typography variant="h6">Пост не найден</Typography>;
   }
 
   return (
-    <Box sx={{ padding: 2 }}>
-      <Card sx={{ maxWidth: 800, margin: '0 auto' }}>
-        <CardContent>
-          <Typography variant="h4" component="div" gutterBottom>
-            {post.body}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            {/*Автор: {user ? user.name : 'Неизвестный автор'}*/}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Дата публикации: {formatDate(post.createdAt)}
-          </Typography>
-          <Typography variant="body1" sx={{ marginTop: 2 }}>
-            {post.body}
-          </Typography>
-        </CardContent>
-      </Card>
+    <Box p={4}>
+      {/* Пост */}
+      <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          {post.title}
+        </Typography>
+        <Typography variant="body1">{post.body}</Typography>
+      </Paper>
+
+      {/* Комментарии */}
+      <Typography variant="h5" gutterBottom>
+        Комментарии
+      </Typography>
+
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      ) : (
+        comments.map((comment) => (
+          <Paper key={comment.id} elevation={1} sx={{ padding: 2, marginBottom: 2 }}>
+            <Typography variant="body1">{comment.body}</Typography>
+            <Typography variant="caption" color="textSecondary">
+              Создано: {new Date(comment.createdAt).toLocaleString()}
+            </Typography>
+          </Paper>
+        ))
+      )}
+
+      {/* Форма добавления комментария */}
+      <Divider sx={{ marginY: 3 }} />
+      <Typography variant="h6">Оставить комментарий</Typography>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+      >
+        <TextField
+          label="Комментарий"
+          variant="outlined"
+          multiline
+          rows={4}
+          {...register('body', { required: 'Комментарий обязателен' })}
+          fullWidth
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Добавить комментарий
+        </Button>
+      </Box>
     </Box>
   );
 };
-
 export default PostDetailPage;

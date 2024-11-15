@@ -5,7 +5,6 @@ export async function fetchUsersApi(): Promise<UserModel[]> {
   const data = await response.json();
   return data.map((user: any) => ({
     ...user,
-    id:user.id.toString(),
     avatarUrl: `https://i.pravatar.cc/150?u=${user.id}`,
   })) as UserModel[];
 }
