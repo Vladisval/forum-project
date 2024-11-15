@@ -2,7 +2,7 @@ import { UserModel } from "../../user/model/UserModel.ts";
 
 export interface PostModel {
   userId: string,
-  id: number,
+  id: string,
   title: string,
   body: string,
   createdAt: string;

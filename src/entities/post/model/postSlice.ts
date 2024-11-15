@@ -6,6 +6,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   return await fetchPostsApi();
 });
 
+
 interface PostsState {
   posts: EnhancedPost[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -20,6 +21,8 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {},
+  selectors: {postById: (sliceState, postId) => {
+    return sliceState.posts.find((post) => post.id === postId)}},
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
@@ -35,4 +38,5 @@ const postsSlice = createSlice({
   },
 });
 
+export const {selectors} = postsSlice
 export default postsSlice.reducer;

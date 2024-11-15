@@ -7,6 +7,8 @@ export async function fetchPostsApi(): Promise<EnhancedPost[]> {
 
   return data.map((post: any) => ({
     ...post,
+    id:post.id.toString(),
     createdAt: new Date().toISOString(),
   })) as EnhancedPost[];
 }
+
