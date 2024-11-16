@@ -1,13 +1,14 @@
 import { EnhancedPost } from "../model/PostModel.ts";
-import { Avatar, Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardContent, CardHeader, Typography } from "@mui/material";
 import { formatDate } from "../../../utils/formatDate.ts";
 import { Link } from "react-router-dom";
 
 interface PostCardProps {
-  post: EnhancedPost;
+  post: EnhancedPost,
+  onDelete: (postId: string) => void
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, onDelete }: PostCardProps) => {
   return (
     <Card variant="outlined" sx={{ mb: 2 }}>
       <CardHeader
@@ -22,6 +23,9 @@ const PostCard = ({ post }: PostCardProps) => {
         <Typography variant="body1" color="text.secondary">
           {post.body}
         </Typography>
+        <Button variant="outlined" color="error" onClick={() => onDelete(post.id)}>
+          Удалить
+        </Button>
       </CardContent>
     </Card>
   );

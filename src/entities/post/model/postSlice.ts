@@ -1,9 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchPostsApi } from "../../../shared/api/postsApi.ts";
+import { addPostToApi, deletePostFromApi, fetchPostsApi } from "../../../shared/api/postsApi.ts";
 import { EnhancedPost } from "./PostModel.ts";
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   return await fetchPostsApi();
+});
+
+export const addPost = createAsyncThunk('posts/addPost', async (newPost: Omit<EnhancedPost, 'id'| 'author'>) => {
+  return await addPostToApi(newPost);
+});
+
+export const deletePost = createAsyncThunk('posts/deletePost', async (postId: string) => {
+  await deletePostFromApi(postId);
+  return postId;
 });
 
 
@@ -34,6 +43,12 @@ const postsSlice = createSlice({
       })
       .addCase(fetchPosts.rejected, (state) => {
         state.status = 'failed';
+      })
+      .addCase(addPost.fulfilled, (state, action) => {
+        state.posts.unshift(action.payload);
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
       });
   },
 });

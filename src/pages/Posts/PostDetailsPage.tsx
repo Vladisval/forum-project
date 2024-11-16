@@ -6,11 +6,8 @@ import { selectors } from "../../entities/post/model/postSlice.ts";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { createComment, fetchComments } from "../../entities/comment/model/commentSlice.ts";
+import { CommentFormInput } from "../../entities/comment/model/CommentModel.ts";
 
-
-interface CommentFormInput {
-  body: string;
-}
 
 const PostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -25,14 +22,14 @@ const PostDetailPage: React.FC = () => {
   useEffect(() => {
     if (postId) {
       // @ts-ignore
-      dispatch(fetchComments(Number(postId)));
+      dispatch(fetchComments(postId));
     }
   }, [postId, dispatch]);
 
   const onSubmit = (data: CommentFormInput) => {
     if (postId) {
       // @ts-ignore
-      dispatch(createComment({ ...data, postId: Number(postId), userId: 1 }));
+      dispatch(createComment({ ...data, postId: postId, userId: 1 }));
       reset();
     }
   };

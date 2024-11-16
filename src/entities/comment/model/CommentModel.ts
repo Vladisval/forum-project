@@ -1,8 +1,12 @@
 
 export interface CommentModel {
-  id: number;
-  postId: number;
-  userId: number;
+  id: string;
+  postId: string;
+  userId: string;
   body: string;
   createdAt: string;
+}
+
+export  interface CommentFormInput {
+  body: string;
 }

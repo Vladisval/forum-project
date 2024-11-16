@@ -1,30 +1,31 @@
 import { EnhancedPost } from "../../entities/post/model/PostModel.ts";
-import { CircularProgress, Container, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import PostCard from "../../entities/post/ui/PostCard.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
-import { fetchPosts } from "../../entities/post/model/postSlice.ts";
+import { addPost, deletePost, fetchPosts } from "../../entities/post/model/postSlice.ts";
 import { fetchUsers } from "../../entities/user/model/userSlice.ts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { selectEnhancedPosts } from "../../entities/post/model/postsSelector.ts";
 import PaginationComponent from "../../shared/ui/PaginationComponent/PaginationComponent.tsx";
 import UserFilter from "../../shared/ui/Filters/usersFilter.tsx";
+import PostForm, { PostFormData } from "../../features/PostForm.tsx";
 
 
 const PostsPage = () => {
   const dispatch = useDispatch();
   const posts = useSelector(selectEnhancedPosts);
   const postsStatus = useSelector((state: RootState) => state.posts.status);
-  const usersStatus = useSelector((state: RootState) => state.users.status);
-  const users = useSelector((state: RootState) => state.users.users);
-  const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
+  const {users, status:usersStatus} = useSelector((state: RootState) => state.users);
+  const itemsPerPage: number = 10;
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedUserId, setSelectedUserId] = useState<string | 'all'>('all');
 
 
   const filteredPosts = selectedUserId === 'all'
     ? posts
     : posts.filter((post) => post.userId === selectedUserId);
+
   const pageCount = Math.ceil(filteredPosts.length / itemsPerPage);
   const paginatedPosts = filteredPosts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -57,6 +58,29 @@ const PostsPage = () => {
     }
   }, [dispatch, postsStatus, usersStatus]);
 
+  const handleAddPost = useCallback(
+    (data: PostFormData) => {
+      // @ts-ignore
+      dispatch(
+        addPost({
+          title: data.title,
+          body: data.body,
+          userId: '1',
+          createdAt: new Date().toISOString(),
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  const handleDeletePost = useCallback(
+    (postId: string) => {
+      // @ts-ignore
+      dispatch(deletePost(postId));
+    },
+    [dispatch]
+  );
+
   if (postsStatus === 'loading' || usersStatus === 'loading') {
     return (
       <Container maxWidth="md" sx={{ textAlign: 'center', pt: 4 }}>
@@ -75,8 +99,12 @@ const PostsPage = () => {
         selectedUserId={selectedUserId}
         onUserChange={handleUserChange}
       />
+      <Box mt={4}>
+        <PostForm onSubmit={handleAddPost} />
+      </Box>
+
       {paginatedPosts.map((post: EnhancedPost) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} onDelete={handleDeletePost} />
       ))}
 
       <PaginationComponent
