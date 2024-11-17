@@ -10,10 +10,11 @@ import { selectEnhancedPosts } from "../../entities/post/model/postsSelector.ts"
 import PaginationComponent from "../../shared/ui/PaginationComponent/PaginationComponent.tsx";
 import UserFilter from "../../shared/ui/Filters/usersFilter.tsx";
 import PostForm, { PostFormData } from "../../features/PostForm.tsx";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 
 const PostsPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<never, never, never>>();
   const posts = useSelector(selectEnhancedPosts);
   const postsStatus = useSelector((state: RootState) => state.posts.status);
   const {users, status:usersStatus} = useSelector((state: RootState) => state.users);
@@ -49,18 +50,15 @@ const PostsPage = () => {
 
   useEffect(() => {
     if (postsStatus === 'idle') {
-      // @ts-ignore
       dispatch(fetchPosts());
     }
     if (usersStatus === 'idle') {
-      // @ts-ignore
       dispatch(fetchUsers());
     }
   }, [dispatch, postsStatus, usersStatus]);
 
   const handleAddPost = useCallback(
     (data: PostFormData) => {
-      // @ts-ignore
       dispatch(
         addPost({
           title: data.title,
@@ -75,7 +73,6 @@ const PostsPage = () => {
 
   const handleDeletePost = useCallback(
     (postId: string) => {
-      // @ts-ignore
       dispatch(deletePost(postId));
     },
     [dispatch]

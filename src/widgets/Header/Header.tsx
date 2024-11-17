@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.scss'
 import { Link, useLocation } from "react-router-dom";
 import { AppBar, Box, Tab, Tabs, Typography } from "@mui/material";
@@ -6,7 +6,16 @@ import { AppBar, Box, Tab, Tabs, Typography } from "@mui/material";
 const Header : React.FC = () => {
 
   const location = useLocation();
-  const currentTab = location.pathname;
+  const [currentTab, setCurrentTab] = useState('/')
+
+  useEffect(() => {
+    if (location.pathname === '/' || location.pathname.includes('posts')) {
+      setCurrentTab('/');
+    }
+    if (location.pathname.includes('users')) {
+      setCurrentTab('/users')
+    }
+  }, [location.pathname])
 
   return (
     <AppBar sx={{display: "flex", flexDirection: "row"}} >

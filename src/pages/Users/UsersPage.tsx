@@ -4,15 +4,15 @@ import { useEffect } from "react";
 import { fetchUsers } from "../../entities/user/model/userSlice.ts";
 import { CircularProgress, Container, Typography } from "@mui/material";
 import UserCard from "../../entities/user/ui/UserCard.tsx";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 
 const UsersPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<never, never, never>>();
   const usersStatus = useSelector((state: RootState) => state.users.status )
   const users = useSelector((state: RootState) => state.users.users)
   useEffect(() => {
     if (usersStatus === 'idle') {
-      // @ts-ignore
       dispatch(fetchUsers());
     }
   }, [dispatch, usersStatus]);

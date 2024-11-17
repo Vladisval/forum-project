@@ -7,11 +7,12 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { createComment, fetchComments } from "../../entities/comment/model/commentSlice.ts";
 import { CommentFormInput } from "../../entities/comment/model/CommentModel.ts";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 
 const PostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<ThunkDispatch<never, never, never>>();
 
   const post = useSelector((state: RootState) => selectors.postById(state, postId!));
   const comments = useSelector((state: RootState) => state.comments.comments);
@@ -21,15 +22,13 @@ const PostDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (postId) {
-      // @ts-ignore
       dispatch(fetchComments(postId));
     }
   }, [postId, dispatch]);
 
   const onSubmit = (data: CommentFormInput) => {
     if (postId) {
-      // @ts-ignore
-      dispatch(createComment({ ...data, postId: postId, userId: 1 }));
+      dispatch(createComment({ ...data, postId: postId, userId: "1" }));
       reset();
     }
   };
