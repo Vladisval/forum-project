@@ -1,7 +1,6 @@
-
-import React, { useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Box, TextField, Button, Typography } from '@mui/material';
+import { useCallback } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Box, Button, TextField, Typography } from '@mui/material';
 
 export interface PostFormData {
   title: string;
@@ -12,7 +11,7 @@ interface PostFormProps {
   onSubmit: (data: PostFormData) => void;
 }
 
-const PostForm: React.FC<PostFormProps> = ({ onSubmit }) => {
+const PostForm = ({ onSubmit }: PostFormProps) => {
   const { control, handleSubmit, reset } = useForm<PostFormData>({
     defaultValues: {
       title: '',

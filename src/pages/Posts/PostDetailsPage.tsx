@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
 import { Box, Button, CircularProgress, TextField, Divider, Paper, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { selectors } from "../../entities/post/model/postSlice.ts";
+import { postById } from "../../entities/post/model/postSlice.ts";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { createComment, fetchComments } from "../../entities/comment/model/commentSlice.ts";
@@ -14,7 +14,7 @@ const PostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const dispatch = useDispatch<ThunkDispatch<never, never, never>>();
 
-  const post = useSelector((state: RootState) => selectors.postById(state, postId!));
+  const post = useSelector((state: RootState) => postById(state, postId!));
   const comments = useSelector((state: RootState) => state.comments.comments);
   const loading = useSelector((state: RootState) => state.comments.loading);
 
