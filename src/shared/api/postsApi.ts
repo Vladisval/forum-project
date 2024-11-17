@@ -12,9 +12,9 @@ export const fetchPostsApi = async (): Promise<EnhancedPost[]> => {
   })) as EnhancedPost[];
 };
 
-export const addPostToApi = async (newPost: Omit<EnhancedPost, 'id' | 'author' | 'createdAt'>): Promise<EnhancedPost> => {
+export const addPostToApi = async (newPost: Omit<EnhancedPost, 'id'| 'author' | 'likes' | 'dislikes' | 'isFavorite' | 'dislikedByUser' | 'likedByUser'>): Promise<EnhancedPost> => {
   const response = await axios.post(BASE_URL, newPost);
-  const post = {...response.data, id: response.data.id.toString()};
+  const post = {...response.data, id: response.data.id.toString(), userId: Number(response.data.userId) } ;
   return post as EnhancedPost;
 };
 

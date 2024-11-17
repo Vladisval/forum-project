@@ -6,7 +6,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   return await fetchPostsApi();
 });
 
-export const addPost = createAsyncThunk('posts/addPost', async (newPost: Omit<EnhancedPost, 'id'| 'author'>) => {
+export const addPost = createAsyncThunk('posts/addPost', async (newPost: Omit<EnhancedPost, 'id'| 'author' | 'likes' | 'dislikes' | 'isFavorite' | 'dislikedByUser' | 'likedByUser'>) => {
   return await addPostToApi(newPost);
 });
 
@@ -93,7 +93,6 @@ const postsSlice = createSlice({
       .addCase(addPost.fulfilled, (state, action) => {
         state.posts.unshift({
           ...action.payload,
-          userId: 1,
           likes: 0,
           dislikes: 0,
           likedByUser: false,
