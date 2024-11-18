@@ -1,11 +1,11 @@
 
 export interface UserModel {
-  id: string,
+  id: string | undefined,
   name: string,
   username: string,
   email: string,
   avatarUrl: string,
-  address?: {
+  address: {
     street: string,
     suite: string,
     city: string,
@@ -17,7 +17,7 @@ export interface UserModel {
   },
   phone: string,
   website: string,
-  company?: {
+  company: {
     name: string,
     catchPhrase: string,
     bs: string

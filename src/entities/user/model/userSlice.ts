@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchUsersApi } from "../../../shared/api/usersApi.ts";
 import { UserModel } from "./UserModel.ts";
 
@@ -19,7 +19,17 @@ const initialState: UsersState = {
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    updateUser: (state, action: PayloadAction<UserModel>) => {
+      const index = state.users.findIndex(user => user.id === action.payload.id);
+      if (index !== -1) {
+        state.users[index] = action.payload;
+      }
+    }
+  },
+  selectors: {
+    userById: (sliceState) => {return sliceState.users.find((user) => user.id === '1')}
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
@@ -34,5 +44,6 @@ const usersSlice = createSlice({
       });
   },
 });
-
+export const {userById} = usersSlice.selectors;
+export const {updateUser} = usersSlice.actions;
 export default usersSlice.reducer;

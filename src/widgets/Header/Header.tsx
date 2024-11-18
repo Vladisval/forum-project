@@ -12,9 +12,13 @@ const Header : React.FC = () => {
     if (location.pathname === '/' || location.pathname.includes('posts')) {
       setCurrentTab('/');
     }
-    if (location.pathname.includes('users')) {
-      setCurrentTab('/users')
+    if (location.pathname.includes('user')) {
+      setCurrentTab('/user')
     }
+    if (location.pathname.includes('profile')) {
+      setCurrentTab('/profile')
+    }
+
   }, [location.pathname])
 
   return (
@@ -39,6 +43,14 @@ const Header : React.FC = () => {
             to="/users"
             sx={{ minWidth: 100,  background: "white" }}
           />
+          <Tab
+            label="Личный кабинет"
+            value="/profile"
+            component={Link}
+            to="/profile"
+            sx={{ minWidth: 100,  background: "white" }}
+          />
+
         </Tabs>
       </Box>
     </AppBar>
