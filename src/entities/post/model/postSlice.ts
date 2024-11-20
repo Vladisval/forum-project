@@ -6,7 +6,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   return await fetchPostsApi();
 });
 
-export const addPost = createAsyncThunk('posts/addPost', async (newPost: Omit<EnhancedPost, 'id'| 'author' | 'likes' | 'dislikes' | 'isFavorite' | 'dislikedByUser' | 'likedByUser'>) => {
+export const addPost = createAsyncThunk('posts/addPost', async (newPost: Omit<EnhancedPost, 'id' | 'likes' | 'dislikes' | 'isFavorite' | 'dislikedByUser' | 'likedByUser'>) => {
   return await addPostToApi(newPost);
 });
 

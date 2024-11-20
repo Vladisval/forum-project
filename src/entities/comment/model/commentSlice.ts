@@ -37,7 +37,10 @@ const commentsSlice = createSlice({
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.loading = false;
-        state.comments = action.payload;
+        state.comments = action.payload.map((comment) => ({
+          ...comment,
+          createdAt: new Date().toISOString()
+        }));
       })
       .addCase(fetchComments.rejected, (state, action) => {
         state.loading = false;

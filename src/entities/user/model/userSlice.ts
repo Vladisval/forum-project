@@ -28,7 +28,7 @@ const usersSlice = createSlice({
     }
   },
   selectors: {
-    userById: (sliceState) => {return sliceState.users.find((user) => user.id === '1')}
+    userById: (sliceState, userId) => {return sliceState.users.find((user) => user.id === userId)}
   },
   extraReducers: (builder) => {
     builder

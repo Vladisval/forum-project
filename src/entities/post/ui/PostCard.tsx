@@ -30,20 +30,21 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
   };
 
   return (
-    <Card variant="outlined" sx={{ mb: 2 }}>
+    <Card sx={{ mb: 2 }}>
       <CardHeader
         component={Link}
-        to={`/posts/${post.id}`}
+        to={`/post/${post.id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
         avatar={<Avatar src={post.author.avatarUrl} alt={post.author.name} />}
         title={post.title}
         subheader={`by ${post.author?.name} - ${formatDate(post.createdAt)}`}
       />
       <CardContent>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="textSecondary">
           {post.body}
         </Typography>
-        <Box display="flex" alignItems="center">
+        <Box display="flex" justifyContent="space-between" paddingTop='20px'>
+          <Box display="flex" alignItems="center">
           <IconButton
             color={post.likedByUser ? 'primary' : 'default'}
             onClick={handleLike}
@@ -54,21 +55,24 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
             {post.likes}
           </Typography>
           <IconButton
-            color={post.dislikedByUser ? 'secondary' : 'default'}
+            color={post.dislikedByUser ? 'primary' : 'default'}
             onClick={handleDislike}
           >
             <ThumbDownIcon />
           </IconButton>
           <Typography variant="body2">{post.dislikes}</Typography>
+
           <Tooltip title={post.isFavorite ? "Удалить из избранного" : "Добавить в избранное"}>
             <IconButton onClick={handleFavorite} color={post.isFavorite ? 'warning' : 'default'}>
               {post.isFavorite ? <StarIcon /> : <StarBorderIcon />}
             </IconButton>
           </Tooltip>
-        </Box>
+          </Box>
         <Button variant="outlined" color="error" onClick={() => onDelete(post.id)}>
           Удалить
         </Button>
+        </Box>
+
       </CardContent>
     </Card>
   );

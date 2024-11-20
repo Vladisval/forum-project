@@ -1,11 +1,10 @@
 import React from 'react';
-import './Layout.scss';
 import { Container } from "@mui/material";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({children}) => {
   return (
     <>
-      <Container className='layout' component="main" maxWidth="md">
+      <Container component="main" maxWidth="md" sx={{margin: '100px auto 20px auto'}}>
         {children}
       </Container>
     </>

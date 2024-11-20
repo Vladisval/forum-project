@@ -1,19 +1,21 @@
 import Layout from '../../shared/ui/Layout';
-import './App.scss'
 import { Outlet } from "react-router-dom";
 import Header from "../../widgets/Header/Header.tsx";
-import { CssBaseline } from "@mui/material";
+import { theme } from "../../shared/config/theme.ts";
+import { ThemeProvider } from "../ThemeProvider";
 
 
 function App() {
 
   return (
     <>
-      <CssBaseline />
-      <Header/>
-      <Layout>
-        <Outlet />
-      </Layout>
+      <ThemeProvider theme={theme}>
+        <Header/>
+        <Layout>
+          <Outlet />
+        </Layout>
+      </ThemeProvider>
+
     </>
   )
 }

@@ -8,13 +8,15 @@ export const selectEnhancedPosts = (state: RootState): EnhancedPost[] => {
 
   return posts.map((post: PostModel) => {
     const author = users.find((user) => user.id === post.userId) || {
-      id: '0',
+      id: 0,
       name: 'Unknown User',
       username: '-',
       email: '-',
       avatarUrl: '',
       phone: '-',
       website: '-',
+      address: {},
+      company: {},
     };
     return {
       ...post,

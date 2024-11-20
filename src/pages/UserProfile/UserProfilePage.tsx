@@ -5,10 +5,11 @@ import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { UserModel } from "../../entities/user/model/UserModel.ts";
+import { RootState } from "../../app/store/store.ts";
 
 
 const UserProfilePage: React.FC = () => {
-  const user = useSelector(userById);
+  const user = useSelector((state: RootState) => userById(state,1));
   const dispatch = useDispatch();
 
   const [editableUser, setEditableUser] = useState<UserModel | null>(user!);
@@ -35,13 +36,12 @@ const UserProfilePage: React.FC = () => {
     }
   };
 
-  // Список примитивных полей для отображения
   const userFields: Array<{ label: string; field: keyof UserModel }> = [
-    { label: "Full Name", field: "name" },
-    { label: "Username", field: "username" },
-    { label: "Email", field: "email" },
-    { label: "Phone", field: "phone" },
-    { label: "Website", field: "website" },
+    {label: "Full Name", field: "name"},
+    {label: "Username", field: "username"},
+    {label: "Email", field: "email"},
+    {label: "Phone", field: "phone"},
+    {label: "Website", field: "website"},
   ];
 
   return (
@@ -53,20 +53,28 @@ const UserProfilePage: React.FC = () => {
         boxShadow: 3,
       }}
     >
-      <Avatar
-        src={editableUser.avatarUrl}
-        alt={editableUser.name}
-        sx={{
-          width: 100,
-          height: 100,
-          boxShadow: 2,
-        }}
-      />
-      <Typography variant="h4" component="h1" gutterBottom>
-        Профиль пользователя
-      </Typography>
+
+      <Box display="flex"
+           flexDirection="column"
+           alignItems="center"
+           gap="10px"
+           paddingBottom="10px">
+        <Typography variant="h4" component="h1">
+          Профиль пользователя
+        </Typography>
+        <Avatar
+          src={editableUser.avatarUrl}
+          alt={editableUser.name}
+          sx={{
+            width: 100,
+            height: 100,
+            boxShadow: 2,
+          }}
+        />
+      </Box>
+
       <Grid container direction="column" spacing={2}>
-        {userFields.map(({ label, field }) => (
+        {userFields.map(({label, field}) => (
           <Grid item key={field}>
             <Box
               sx={{
@@ -90,23 +98,23 @@ const UserProfilePage: React.FC = () => {
                     onClick={saveField}
                     aria-label="Сохранить"
                   >
-                    <SaveIcon />
+                    <SaveIcon/>
                   </IconButton>
                 </>
               ) : (
                 <>
-                  <Typography variant="body1" sx={{ flexGrow: 1 }}>
+                  <Typography variant="body1" sx={{flexGrow: 1}}>
                     <strong>{label}:</strong>
                     {typeof editableUser[field] === "string" || typeof editableUser[field] === "number"
-                    ? editableUser[field]
-                    : ""}
+                      ? editableUser[field]
+                      : ""}
                   </Typography>
                   <IconButton
                     color="default"
                     onClick={() => setEditingField(field)}
                     aria-label="Редактировать"
                   >
-                    <EditIcon />
+                    <EditIcon/>
                   </IconButton>
                 </>
               )}

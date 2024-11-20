@@ -1,16 +1,16 @@
 import { EnhancedPost } from "../../entities/post/model/PostModel.ts";
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Typography } from "@mui/material";
 import PostCard from "../../entities/post/ui/PostCard.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
-import { addPost, deletePost, fetchPosts } from "../../entities/post/model/postSlice.ts";
+import { deletePost, fetchPosts } from "../../entities/post/model/postSlice.ts";
 import { fetchUsers } from "../../entities/user/model/userSlice.ts";
 import { useCallback, useEffect, useState } from "react";
 import { selectEnhancedPosts } from "../../entities/post/model/postsSelector.ts";
 import PaginationComponent from "../../shared/ui/PaginationComponent/PaginationComponent.tsx";
 import UserFilter from "../../shared/ui/Filters/usersFilter.tsx";
-import PostForm, { PostFormData } from "../../features/PostForm.tsx";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import CreatePostModal from "../../entities/post/ui/CreatePostModal.tsx";
 
 
 const PostsPage = () => {
@@ -21,11 +21,12 @@ const PostsPage = () => {
   const itemsPerPage: number = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedUserId, setSelectedUserId] = useState<string | 'all'>('all');
-
+  const [openModal, setOpenModal] = useState(false);
+  console.log(posts)
 
   const filteredPosts = selectedUserId === 'all'
     ? posts
-    : posts.filter((post) => post.userId === selectedUserId);
+    : posts.filter((post) => post.userId === Number(selectedUserId));
 
   const pageCount = Math.ceil(filteredPosts.length / itemsPerPage);
   const paginatedPosts = filteredPosts.slice(
@@ -57,19 +58,6 @@ const PostsPage = () => {
     }
   }, [dispatch, postsStatus, usersStatus]);
 
-  const handleAddPost = useCallback(
-    (data: PostFormData) => {
-      dispatch(
-        addPost({
-          title: data.title,
-          body: data.body,
-          userId: '1',
-          createdAt: new Date().toISOString(),
-        })
-      );
-    },
-    [dispatch]
-  );
 
   const handleDeletePost = useCallback(
     (postId: string) => {
@@ -77,6 +65,10 @@ const PostsPage = () => {
     },
     [dispatch]
   );
+
+  const handleClickOpenModel = () => {
+    setOpenModal(true);
+  }
 
   if (postsStatus === 'loading' || usersStatus === 'loading') {
     return (
@@ -88,16 +80,16 @@ const PostsPage = () => {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h4" component="h1" align="center" gutterBottom>
-        User Posts
+      <Typography variant="h4" component="h1" align="center" >
+        Posts
       </Typography>
-      <UserFilter
-        users={users}
-        selectedUserId={selectedUserId}
-        onUserChange={handleUserChange}
-      />
-      <Box mt={4}>
-        <PostForm onSubmit={handleAddPost} />
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{padding: "15px 0"}}>
+        <UserFilter
+          users={users}
+          selectedUserId={selectedUserId}
+          onUserChange={handleUserChange}
+        />
+        <Button onClick={handleClickOpenModel}  variant="contained" color="secondary"> Create Post </Button>
       </Box>
 
       {paginatedPosts.map((post: EnhancedPost) => (
@@ -109,6 +101,7 @@ const PostsPage = () => {
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
+      <CreatePostModal setOpenModal={setOpenModal} openModal={openModal} />
     </Container>
   );
 };

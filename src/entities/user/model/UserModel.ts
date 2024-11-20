@@ -1,16 +1,16 @@
 
 export interface UserModel {
-  id: string | undefined,
+  id: number,
   name: string,
   username: string,
   email: string,
   avatarUrl: string,
   address: {
-    street: string,
-    suite: string,
-    city: string,
-    zipcode: string,
-    geo: {
+    street?: string,
+    suite?: string,
+    city?: string,
+    zipcode?: string,
+    geo?: {
       lat: string,
       lng: string
     }
@@ -18,8 +18,8 @@ export interface UserModel {
   phone: string,
   website: string,
   company: {
-    name: string,
-    catchPhrase: string,
-    bs: string
+    name?: string,
+    catchPhrase?: string,
+    bs?: string
   }
 }

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
-import { Box, Button, CircularProgress, TextField, Divider, Paper, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, TextField, Divider, Paper, Typography, Avatar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { postById } from "../../entities/post/model/postSlice.ts";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { createComment, fetchComments } from "../../entities/comment/model/commentSlice.ts";
 import { CommentFormInput } from "../../entities/comment/model/CommentModel.ts";
 import { ThunkDispatch } from "@reduxjs/toolkit";
+import { formatDate } from "../../utils/formatDate.ts";
+import { userById } from "../../entities/user/model/userSlice.ts";
 
 
 const PostDetailPage: React.FC = () => {
@@ -17,7 +19,7 @@ const PostDetailPage: React.FC = () => {
   const post = useSelector((state: RootState) => postById(state, postId!));
   const comments = useSelector((state: RootState) => state.comments.comments);
   const loading = useSelector((state: RootState) => state.comments.loading);
-
+  const user = useSelector((state: RootState) => userById(state,post!.userId));
   const { register, handleSubmit, reset } = useForm<CommentFormInput>();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const PostDetailPage: React.FC = () => {
 
   const onSubmit = (data: CommentFormInput) => {
     if (postId) {
-      dispatch(createComment({ ...data, postId: postId, userId: "1" }));
+      dispatch(createComment({ ...data, postId: postId, userId: 1 }));
       reset();
     }
   };
@@ -39,15 +41,21 @@ const PostDetailPage: React.FC = () => {
 
   return (
     <Box p={4}>
-      {/* Пост */}
-      <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          {post.title}
-        </Typography>
-        <Typography variant="body1">{post.body}</Typography>
+      <Paper component={Box} elevation={3} sx={{ padding: 3, marginBottom: 3, display: "flex", gap: 1}}>
+        <Box minWidth="20%" display="flex" flexDirection="column" alignItems="center" gap={1}>
+          <Avatar src={user!.avatarUrl}></Avatar>
+          <Typography>{user!.name}</Typography>
+          <Typography color="textSecondary">{formatDate(post.createdAt)}</Typography>
+        </Box>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            {post.title}
+          </Typography>
+          <Typography variant="body1">{post.body}</Typography>
+        </Box>
+
       </Paper>
 
-      {/* Комментарии */}
       <Typography variant="h5" gutterBottom>
         Комментарии
       </Typography>
@@ -61,15 +69,14 @@ const PostDetailPage: React.FC = () => {
           <Paper key={comment.id} elevation={1} sx={{ padding: 2, marginBottom: 2 }}>
             <Typography variant="body1">{comment.body}</Typography>
             <Typography variant="caption" color="textSecondary">
-              Создано: {new Date(comment.createdAt).toLocaleString()}
+              Создано: {formatDate(comment.createdAt)}
             </Typography>
           </Paper>
         ))
       )}
 
-      {/* Форма добавления комментария */}
       <Divider sx={{ marginY: 3 }} />
-      <Typography variant="h6">Оставить комментарий</Typography>
+      <Typography variant="h6" gutterBottom>Оставить комментарий</Typography>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -79,9 +86,8 @@ const PostDetailPage: React.FC = () => {
           label="Комментарий"
           variant="outlined"
           multiline
-          rows={4}
+          rows={2}
           {...register('body', { required: 'Комментарий обязателен' })}
-          fullWidth
         />
         <Button type="submit" variant="contained" color="primary">
           Добавить комментарий
