@@ -8,7 +8,7 @@ import { RootState } from "../../app/store/store.ts";
 const Header : React.FC = () => {
 
   const location = useLocation();
-  const [currentTab, setCurrentTab] = useState<string | undefined>('/')
+  const [currentTab, setCurrentTab] = useState<string | null>('/')
   const user = useSelector((state: RootState) => userById(state,1));
 
   useEffect(() => {
@@ -18,9 +18,9 @@ const Header : React.FC = () => {
     if (location.pathname.includes('users')) {
       setCurrentTab('/users')
     }
-    // if (location.pathname.includes('profile')){
-    //   setCurrentTab(undefined);
-    // }
+    if (location.pathname.includes('profile')){
+      setCurrentTab(null);
+    }
   }, [location.pathname])
 
   return (

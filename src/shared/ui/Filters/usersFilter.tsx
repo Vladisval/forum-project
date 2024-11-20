@@ -14,6 +14,7 @@ const UserFilter = ({ users, selectedUserId, onUserChange } : UserFilterProps) =
   return (
     <Box sx={{maxWidth: 300}}>
       <Select
+        variant="outlined"
         value={selectedUserId}
         onChange={handleChange}
         displayEmpty
