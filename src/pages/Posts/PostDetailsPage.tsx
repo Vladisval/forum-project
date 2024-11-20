@@ -56,9 +56,12 @@ const PostDetailPage: React.FC = () => {
 
       </Paper>
 
-      <Typography variant="h5" gutterBottom>
+      {comments.length ?
+        <Typography variant="h5" gutterBottom>
         Комментарии
-      </Typography>
+      </Typography> :
+        <Typography variant="h5"> Здесь пока нет комментариев </Typography>
+      }
 
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center">
@@ -76,6 +79,7 @@ const PostDetailPage: React.FC = () => {
       )}
 
       <Divider sx={{ marginY: 3 }} />
+
       <Typography variant="h6" gutterBottom>Оставить комментарий</Typography>
       <Box
         component="form"
@@ -89,7 +93,7 @@ const PostDetailPage: React.FC = () => {
           rows={2}
           {...register('body', { required: 'Комментарий обязателен' })}
         />
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="secondary" sx={{width: "230px"}}>
           Добавить комментарий
         </Button>
       </Box>

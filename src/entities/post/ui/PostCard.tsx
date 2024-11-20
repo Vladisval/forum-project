@@ -2,12 +2,14 @@ import { EnhancedPost } from "../model/PostModel.ts";
 import { Avatar, Box, Button, Card, CardContent, CardHeader, IconButton, Tooltip, Typography } from "@mui/material";
 import { formatDate } from "../../../utils/formatDate.ts";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { dislikePost, likePost, toggleIsFavorite } from "../model/postSlice.ts";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { userById } from "../../user/model/userSlice.ts";
+import { RootState } from "../../../app/store/store.ts";
 
 interface PostCardProps {
   post: EnhancedPost,
@@ -15,8 +17,9 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post, onDelete }: PostCardProps) => {
-
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => userById(state, 1))
+
   const handleLike = () => {
     dispatch(likePost(post.id));
   };
@@ -68,9 +71,13 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
             </IconButton>
           </Tooltip>
           </Box>
-        <Button variant="outlined" color="error" onClick={() => onDelete(post.id)}>
-          Удалить
-        </Button>
+          {post.userId === user!.id ?
+            <Button variant="outlined" color="error" onClick={() => onDelete(post.id)}>
+              Удалить
+            </Button> :
+            <></>
+          }
+
         </Box>
 
       </CardContent>

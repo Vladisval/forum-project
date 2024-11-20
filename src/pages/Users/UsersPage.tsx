@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
 import { useEffect } from "react";
 import { fetchUsers } from "../../entities/user/model/userSlice.ts";
-import { CircularProgress, Container, Typography } from "@mui/material";
+import { Alert, AlertTitle, CircularProgress, Container, Typography } from "@mui/material";
 import UserCard from "../../entities/user/ui/UserCard.tsx";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 
@@ -24,6 +24,15 @@ const UsersPage = () => {
         <CircularProgress />
       </Container>
     )
+  }
+
+  if (usersStatus === 'failed') {
+    return <Container maxWidth="sm" sx={{ pt: 4 }}>
+      <Alert variant="filled" severity="error">
+        <AlertTitle>Error</AlertTitle>
+        Произошла ошибка загрузки данных
+      </Alert>
+    </Container>
   }
 
   return (

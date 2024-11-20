@@ -70,8 +70,7 @@ const postsSlice = createSlice({
     },
   },
   selectors: {
-    postById: (sliceState, postId) => {
-    return sliceState.posts.find((post) => post.id === postId)}
+    postById: (sliceState, postId) => {return sliceState.posts.find((post) => post.id === postId)},
   },
   extraReducers: (builder) => {
     builder

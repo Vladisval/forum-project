@@ -1,5 +1,5 @@
 import { EnhancedPost } from "../../entities/post/model/PostModel.ts";
-import { Box, Button, CircularProgress, Container, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, CircularProgress, Container, Typography } from "@mui/material";
 import PostCard from "../../entities/post/ui/PostCard.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/store.ts";
@@ -22,7 +22,6 @@ const PostsPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedUserId, setSelectedUserId] = useState<string | 'all'>('all');
   const [openModal, setOpenModal] = useState(false);
-  console.log(posts)
 
   const filteredPosts = selectedUserId === 'all'
     ? posts
@@ -78,6 +77,15 @@ const PostsPage = () => {
     );
   }
 
+  if (postsStatus === 'failed' || usersStatus === 'failed') {
+    return <Container maxWidth="sm" sx={{ pt: 4 }}>
+      <Alert variant="filled" severity="error">
+        <AlertTitle>Error</AlertTitle>
+        Произошла ошибка загрузки данных
+      </Alert>
+    </Container>
+  }
+
   return (
     <Container maxWidth="md">
       <Typography variant="h4" component="h1" align="center" >
@@ -92,15 +100,21 @@ const PostsPage = () => {
         <Button onClick={handleClickOpenModel}  variant="contained" color="secondary"> Create Post </Button>
       </Box>
 
-      {paginatedPosts.map((post: EnhancedPost) => (
-        <PostCard key={post.id} post={post} onDelete={handleDeletePost} />
-      ))}
+      {filteredPosts.length ?
+        paginatedPosts.map((post: EnhancedPost) => (
+          <PostCard key={post.id} post={post} onDelete={handleDeletePost} />
+        )) :
+        <Box display="flex" justifyContent="center">
+          <Typography variant='h5'>Здесь пока ничего нет</Typography>
+        </Box>
+      }
 
-      <PaginationComponent
+
+      {filteredPosts.length > itemsPerPage ? <PaginationComponent
         pageCount={pageCount}
         currentPage={currentPage}
         onPageChange={handlePageChange}
-      />
+      /> : <> </>}
       <CreatePostModal setOpenModal={setOpenModal} openModal={openModal} />
     </Container>
   );
