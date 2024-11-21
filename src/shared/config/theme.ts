@@ -19,24 +19,6 @@ export const theme = createTheme({
     body1: { fontSize: "1rem" },
   },
   components: {
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'black',
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'orange',
-          '&.Mui-selected': {
-            // backgroundColor: 'black',
-            // color: 'black',
-          },
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
         root: {
